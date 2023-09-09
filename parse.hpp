@@ -3,6 +3,9 @@
 
 #define MAXARGS 32
 
+#include <iostream>
+#include <cstring>
+
 class Param{
 	private:
 		char *inputRedirect; 		/* file name or NULL */
