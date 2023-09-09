@@ -13,6 +13,7 @@ class Param{
 
 	public:
 		Param(string);
+		~Param();
 		void printParams();
 }
 
