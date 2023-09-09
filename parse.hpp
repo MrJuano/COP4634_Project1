@@ -15,9 +15,9 @@ class Param{
 		char *argumentVector[MAXARGS]; 	/* array of strings */
 
 	public:
-		Param(string);
+		Param(const char*);
 		~Param();
 		void printParams();
-}
+};
 
 #endif

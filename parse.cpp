@@ -1,23 +1,27 @@
 #include "parse.hpp"
 
-Parse::Parse(string input){
+Param::Param(const char *input){
 	inputRedirect = NULL;
 	outputRedirect = NULL;
 	background = 0;
-	argumentCount = argumentVector.size();
+	argumentCount = 0;
 	
-	char *commands = strtok(input, " \n\t");
+	char *commands = strtok(const_cast<char *>(input), " \n\t");
 
 	while(commands != nullptr){
-		if(strcmp(commands, "<") == 0){
-			commands = strtok(NULL, " \n\t");
-			//inputRedirect = new char[strlen(commands) + 1];
-			strcpy(inputRedirect, commands);
+		if(commands[0] == '<'){
+			if(commands != nullptr){
+				inputRedirect = new char[strlen(commands) + 1];
+				strcpy(inputRedirect, commands);
+				inputRedirect++;
+			}
 		}
-		else if(strcmp(commands, ">") == 0){
-			commands = strtok(NULL, " \n\t");
-			//outputRedirect = new char[strlen(commands) + 1];
-			strcpy(outputRedirect, commands);
+		else if(commands[0] == '>'){
+			if(commands != nullptr){
+				outputRedirect = new char[strlen(commands) + 1];
+				strcpy(outputRedirect, commands);
+				outputRedirect++;
+			}
 		}
 		else if(strcmp(commands, "&") == 0)
 			background = 1;
@@ -30,20 +34,28 @@ Parse::Parse(string input){
 		commands = strtok(NULL, " \n\t");
 	}
 
+	delete commands;
 }
 
 Param::~Param(){
-	delete[] inputRedirect;
-	delete[] outputRedirect;
+	delete[] (inputRedirect - 1);
+	delete[] (outputRedirect - 1);
 
 	for(int i = 0; i < argumentCount; ++i){
 		delete[] argumentVector[i];
 	}
 }
 
-void Parse::printParams(){
-	std::cout << "InputRedirect: [" << inputRedirect << "]\n";
-	std::cout << "OutputRedirect: [" << outputRedirect << "]\n";
+void Param::printParams(){
+	if(inputRedirect == NULL)
+		std::cout << "InputRedirect: [NULL]\n";		
+	else
+		std::cout << "InputRedirect: [" << inputRedirect << "]\n";
+	if(outputRedirect == NULL)
+		std::cout << "OutputRedirect: [NULL]\n";
+	else
+		std::cout << "OutputRedirect: [" << outputRedirect << "]\n";
+
 	std::cout << "Background: [" << background << "]\n";
 	std::cout << "ArgumentCount: [" << argumentCount << "]\n";
 	

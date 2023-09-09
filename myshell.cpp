@@ -1,23 +1,20 @@
 #include "parse.hpp"
 
 int main(){
-	int end = 0;
-	while(end == 0){
-		end = driver();
-	}
+	Param *par = NULL;
+	while(true){
+		char input[500];
+		std::cout << "$$$ ";
+		std::cin.getline(input, 500);
 
-	return 1;
-}
+		if (strcmp(input, "exit") == 0){
+			break;		
+		}
 
-int driver(){
-	std::cout << "$$$ ";
-	std.cin.getline(input);
-
-	if (strcmp(input, "exit") == 0){
-		return 1;		
-	}
-
-	Param par = new Param(input);
+		par = new Param(input);
 	
-	par.printParams();
+		par->printParams();
+	}
+
+	return 0;
 }
