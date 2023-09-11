@@ -1,5 +1,5 @@
-#ifndef PARAM_HPP
-#define PARAM_HPP
+#ifndef PARSE_HPP
+#define PARSE_HPP
 
 #define MAXARGS 32
 
