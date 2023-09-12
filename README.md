@@ -16,10 +16,11 @@ Input/Output Redirection Format Fielded:
     format of ">input.txt" rather than "> input.txt".
 
 Project Members:
+
     Name:           Juan Morales-Vargas
     Institution:    University of West Florida
     Email:          jdm161@students.uwf.edu
-
+    
     Name:           Brian Francis
     Institution:    University of West Florida
     Email:          bf15@students.uwf.edu         
@@ -34,6 +35,7 @@ FILE OVERVIEW
         README
 
 Launch Instructions:
+
     Within Bash, enter the following command after the prompt, then hit enter:
 
     Make myshell
@@ -49,6 +51,7 @@ Launch Instructions:
     The program will enter Debug mode; see Program Behavior, item 5 for further details.
 
 Exit Command:
+
     To exit the program, enter the following command after the prompt, then hit enter:
 
     exit
@@ -56,6 +59,7 @@ Exit Command:
     The program will exit and return the user to Bash.
 
 Program Behavior:
+
     1. Displays a prompt, $$$, on *stdout*.
     2. Accept a command as a string from the user (input string will terminate with
        a newline character. The program will exit when the command *exit* is entered
@@ -67,6 +71,7 @@ Program Behavior:
     6. Return back to step 1
 
 Sample Run with Debug mode enabled:
+
     ./myshell -Debug
     $$$ one two three <four >five &
     InputRedirect: [four]
