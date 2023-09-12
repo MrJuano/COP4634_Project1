@@ -6,7 +6,6 @@ void printInput(char input[500]){
 }
 
 int main(){
-	Param *par = NULL;
 	int debugMode = 0;
 	
 	char input[500];
