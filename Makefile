@@ -1,7 +1,8 @@
-main: myshell.o parse.o
+CFLAGS = -g -Wall 
+CC = gcc
+
+myshell: myshell.o parse.o
 	g++ -o myshell myshell.o parse.o
-	./myshell
-	$(RM) -rf *.o myshell
 
 parse.o: parse.cpp parse.hpp
 	g++ -std=c++14 -c parse.cpp

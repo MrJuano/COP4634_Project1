@@ -5,8 +5,11 @@ void printInput(char input[500]){
 	par->printParams();
 }
 
-int main(){
+int main(int args, char* command[]){
 	int debugMode = 0;
+
+	if(strcmp(command[1], "-Debug") == 0)
+		debugMode = 1;
 	
 	char input[500];
 	char inputBuffer[500];
