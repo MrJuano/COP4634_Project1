@@ -3,15 +3,18 @@ This readme file was generated on 2023-09-11 by Brian Francis & Juan Morales-Var
 GENERAL INFORMATION
 
 Title:
+
     COP 4634 Project 1 - Midpoint, Creating Your Own Shell
 
 Description:
+
     Part one of a two part project to implement program myshell. This program will
     parse an input string into a structure that will be used by part 2 to create a
     new process. It  implements a simplified/basic shell that parses a command entered 
     by the user, input redirection, output redirection and background execution.
 
 Input/Output Redirection Format Fielded:
+
     Program does not accept spaces after the redirect token, it must be in a 
     format of ">input.txt" rather than "> input.txt".
 
