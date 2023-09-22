@@ -18,6 +18,9 @@ class Param{
 		Param(const char*);
 		~Param();
 		void printParams();
+		char getInput();
+		char getOutput();
+		int getBackground();
 };
 
 #endif
