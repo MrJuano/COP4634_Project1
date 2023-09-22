@@ -60,6 +60,9 @@ int main(int args, char* command[]){
 			commands = strtok(NULL, " \n\t");
 			cat();
 		}
+		if(commands[0] == '.' && commands[1] == '/'){
+
+		}
 
 	}
 
