@@ -18,9 +18,9 @@ class Param{
 		Param(const char*);
 		~Param();
 		void printParams();
-		char getInput();
-		char getOutput();
-		int getBackground();
+		char* getInput() {return inputRedirect;}
+		char* getOutput() {return outputRedirect;}
+		int getBackground() {return background;}
 };
 
 #endif
