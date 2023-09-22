@@ -1,4 +1,9 @@
 #include "parse.hpp"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
 
 void printInput(char input[500]){
 	Param *par = new Param(input);
@@ -6,7 +11,12 @@ void printInput(char input[500]){
 }
 
 void ls(char* commands){
+	int status;
 	
+	if ( fork() == 0 )
+		execv( "/bin/ls", NULL );
+	else
+		wait( &status );	
 }
 
 void grep(){
@@ -25,17 +35,19 @@ int main(int args, char* command[]){
 			debugMode = 1;
 	}
 	
-	char input[1500];
-	char inputBuffer[1500];
+	char input[500];
+	char inputBuffer[500];
 
 	while(true){
 		std::cout << "$$$ ";
-		std::cin.getline(input, 1500);
-
+		std::cin.getline(input, 500);
+		
 		if (strcmp(input, "exit") == 0)
 			break;		
+		
 		if(strcmp(input, "printParam()") == 0)
 			printInput(inputBuffer);
+		
 		else if(debugMode == 1)
 			printInput(input);
 		
@@ -46,24 +58,22 @@ int main(int args, char* command[]){
 	
 	
 		char *commands = strtok(const_cast<char *>(input), " \n\t");
-
-		if(strcmp(commands, "ls")){
+		
+		if(strcmp(commands, "ls") == 0){
 			commands = strtok(NULL, " \n\t");	
 			ls(commands);
 		}
-
-		if(strcmp(commands, "grep")){
+		else if(strcmp(commands, "grep") == 0){
 			commands = strtok(NULL, " \n\t");
 			grep();
 		}
-		if(strcmp(commands, "cat")){
+		else if(strcmp(commands, "cat") == 0){
 			commands = strtok(NULL, " \n\t");
 			cat();
 		}
-		if(commands[0] == '.' && commands[1] == '/'){
+		else if(commands[0] == '.' && commands[1] == '/'){
 
 		}
-
 	}
 
 	return 0;
