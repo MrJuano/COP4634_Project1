@@ -13,10 +13,20 @@ void printInput(char input[500]){
 void ls(char* commands){
 	int status;
 	
-	if ( fork() == 0 )
-		execv( "/bin/ls", NULL );
-	else
-		wait( &status );	
+	if(commands == NULL){
+		char *args[] = {"/bin/ls", NULL};	
+		if(fork() == 0)
+			execv(args[0], args);
+		else
+			wait(&status);
+	}
+	else if(strcmp(commands, "-l") == 0){
+		char *args[] = {"/bin/ls", "-l", NULL};
+		if(fork() == 0)
+			execv(args[0], args);
+		else
+			wait(&status);
+	}	
 }
 
 void grep(){
