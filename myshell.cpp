@@ -5,6 +5,18 @@ void printInput(char input[500]){
 	par->printParams();
 }
 
+void ls(char input[500], char file[500]){
+	
+}
+
+void grep(){
+
+}
+
+void cat(){
+
+}
+
 int main(int args, char* command[]){
 	int debugMode = 0;
 	
