@@ -21,11 +21,34 @@ void ls(char* commands){
 			wait(&status);
 	}
 	else if(strcmp(commands, "-l") == 0){
-		char *args[] = {"/bin/ls", "-l", NULL};
-		if(fork() == 0)
-			execv(args[0], args);
-		else
-			wait(&status);
+		commands = strtok(NULL, " \n\t-l");
+		if(commands == NULL){
+			char *args[] = {"/bin/ls", "-l", NULL};
+			if(fork() == 0)
+				execv(args[0], args);
+			else
+				wait(&status);
+		}
+		else if(commands[0] == '>'){
+			char *fileName = new char[strlen(commands) + 1];
+			strcpy(fileName, commands);
+			fileName++;
+
+			std::cout << fileName;
+			char *args[] = {"/bin/ls", "-l", fileName, NULL};
+			if(fork() == 0){
+				freopen(fileName, "w", stdout);
+               			execlp("ls", "ls", "-l", (char *)NULL);
+			}
+			else
+				wait(&status);
+
+			std::cout << "DONE\n";
+		}
+		else{
+			std::cout << "ERROR\n";
+		}
+
 	}	
 }
 
@@ -69,7 +92,8 @@ int main(int args, char* command[]){
 	
 		char *commands = strtok(const_cast<char *>(input), " \n\t");
 		
-		if(strcmp(commands, "ls") == 0){
+		if(commands == NULL){}	
+		else if(strcmp(commands, "ls") == 0){
 			commands = strtok(NULL, " \n\t");	
 			ls(commands);
 		}
