@@ -5,7 +5,7 @@ void printInput(char input[500]){
 	par->printParams();
 }
 
-void ls(char input[500], char file[500]){
+void ls(char* commands){
 	
 }
 
@@ -25,21 +25,17 @@ int main(int args, char* command[]){
 			debugMode = 1;
 	}
 	
-	char input[500];
-	char inputBuffer[500];
+	char input[1500];
+	char inputBuffer[1500];
 
 	while(true){
 		std::cout << "$$$ ";
 		std::cin.getline(input, 1500);
 
-		if (strcmp(input, "exit") == 0){
+		if (strcmp(input, "exit") == 0)
 			break;		
-		}
-		
-		if(strcmp(input, "printParam()") == 0){
+		if(strcmp(input, "printParam()") == 0)
 			printInput(inputBuffer);
-
-		}
 		else if(debugMode == 1)
 			printInput(input);
 		
@@ -47,6 +43,24 @@ int main(int args, char* command[]){
 			debugMode = 1;
 		else
 			strcpy(inputBuffer, input);
+	
+	
+		char *commands = strtok(const_cast<char *>(input), " \n\t");
+
+		if(strcmp(commands, "ls")){
+			commands = strtok(NULL, " \n\t");	
+			ls(commands);
+		}
+
+		if(strcmp(commands, "grep")){
+			commands = strtok(NULL, " \n\t");
+			grep();
+		}
+		if(strcmp(commands, "cat")){
+			commands = strtok(NULL, " \n\t");
+			cat();
+		}
+
 	}
 
 	return 0;
