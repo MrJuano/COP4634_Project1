@@ -100,6 +100,33 @@ void cat(char *commands){
 		}
 
 	}
+	else{
+		char *fileName = new char[strlen(commands)];
+		strcpy(fileName, commands);
+		
+		commands = strtok(NULL, " \t\n");	
+
+		if(commands == NULL){
+			char *args[] = {"cat", fileName, NULL};
+			if(fork() == 0){
+				execvp("cat", args);
+			}
+			else
+				wait(&status);
+		}
+		else {
+			if(strcmp(commands, "&") == 0){
+				char *args[] = {"cat", fileName, NULL};
+				if(fork() == 0){
+					execvp("cat", args);
+				}
+				else
+					wait(NULL);
+			}
+			else
+				std::cout << "ERROR: UNEXPECTED INPUT\n";
+		}
+	}
 }
 
 int main(int args, char* command[]){
