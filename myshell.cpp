@@ -51,7 +51,8 @@ void ls(char* commands){
 }
 
 void grep(char *commands){
-	if(commands == NULL){std::cout << "FUCG";}
+	int status;
+	if(commands == NULL){}
 	else if(commands[0] == '-' && commands[1] == 'i'){
 		commands = strtok(NULL, " \t\n");
 
@@ -62,7 +63,10 @@ void grep(char *commands){
 			if(commands == NULL){}
 			else {
 				char *args[] = {"grep", "-i", "shell", commands, NULL};
-				execv("/bin/grep", args);
+				if(fork() == 0)
+					execv("/bin/grep", args);
+				else
+					wait(&status);
 			}
 		}
 	}
@@ -129,6 +133,25 @@ void cat(char *commands){
 	}
 }
 
+void runFile(char* commands){
+	int status;
+	char *args[] = {commands, NULL};
+	commands = strtok(NULL, " \t\n");
+	if(commands == NULL){
+		if(fork() == 0)
+			execv(args[0], args);
+		else
+			wait(&status);
+	}
+	else if(strcmp(commands, "&") == 0){
+		if(fork() == 0){
+			execv(args[0], args);
+		}
+		else
+			wait(NULL);
+	}
+}
+
 int main(int args, char* command[]){
 	int debugMode = 0;
 	
@@ -175,7 +198,7 @@ int main(int args, char* command[]){
 			cat(commands);
 		}
 		else if(commands[0] == '.' && commands[1] == '/'){
-
+			runFile(commands);
 		}
 	}
 
