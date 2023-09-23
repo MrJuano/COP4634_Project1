@@ -34,7 +34,6 @@ void ls(char* commands){
 			strcpy(fileName, commands);
 			fileName++;
 
-			std::cout << fileName;
 			char *args[] = {"/bin/ls", "-l", fileName, NULL};
 			if(fork() == 0){
 				freopen(fileName, "w", stdout);
@@ -43,7 +42,6 @@ void ls(char* commands){
 			else
 				wait(&status);
 
-			std::cout << "DONE\n";
 		}
 		else{
 			std::cout << "ERROR\n";
@@ -53,9 +51,8 @@ void ls(char* commands){
 }
 
 void grep(char *commands){
-	//std::cout << commands << "IN\n";
 	if(commands == NULL){std::cout << "FUCG";}
-	else if(commands[0] == '-' && commands[1] == 'i'){//strcmp(commands, "-i") == 0){
+	else if(commands[0] == '-' && commands[1] == 'i'){
 		std::cout << "ININ\n";
 		commands = strtok(NULL, " \t\n");
 
@@ -73,8 +70,23 @@ void grep(char *commands){
 	}
 }
 
-void cat(){
+void cat(char *commands){
+	int status;
+	if(commands[0] == '<'){
+		char *fileName = new char[strlen(commands) + 1];
+		strcpy(fileName, commands);
+		fileName++;
 
+		char *args[] = {"cat", fileName, NULL};
+		if(fork() == 0){
+			//freopen(fileName, "w", stdout);
+               		//execlp("ls", "ls", "-l", (char *)NULL);i
+			execvp("cat", args);
+		}
+		else
+			wait(&status);
+
+	}
 }
 
 int main(int args, char* command[]){
@@ -120,7 +132,7 @@ int main(int args, char* command[]){
 		}
 		else if(strcmp(commands, "cat") == 0){
 			commands = strtok(NULL, " \n\t");
-			cat();
+			cat(commands);
 		}
 		else if(commands[0] == '.' && commands[1] == '/'){
 
