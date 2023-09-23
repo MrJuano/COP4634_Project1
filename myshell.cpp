@@ -137,18 +137,18 @@ void runFile(char* commands){
 	int status;
 	char *args[] = {commands, NULL};
 	commands = strtok(NULL, " \t\n");
-	if(commands == NULL){
-		if(fork() == 0)
-			execv(args[0], args);
-		else
-			wait(&status);
-	}
-	else if(strcmp(commands, "&") == 0){
+	if(strcmp(commands, "&") == 0){
 		if(fork() == 0){
 			execv(args[0], args);
 		}
 		else
 			wait(NULL);
+	}
+	else if(commands == NULL){
+		if(fork() == 0)
+			execv(args[0], args);
+		else
+			wait(&status);
 	}
 }
 
@@ -162,13 +162,15 @@ int main(int args, char* command[]){
 	
 	char input[500];
 	char inputBuffer[500];
-
+	int status;
 	while(true){
 		std::cout << "$$$ ";
 		std::cin.getline(input, 500);
 		
-		if (strcmp(input, "exit") == 0)
-			break;		
+		if (strcmp(input, "exit") == 0){
+			wait(NULL);
+			break;	
+		}
 		
 		if(strcmp(input, "printParam()") == 0)
 			printInput(inputBuffer);
@@ -198,7 +200,25 @@ int main(int args, char* command[]){
 			cat(commands);
 		}
 		else if(commands[0] == '.' && commands[1] == '/'){
-			runFile(commands);
+			//runFile(commands);
+			int status;
+			char *args[] = {commands, NULL};
+			
+			commands = strtok(NULL, " \t\n");
+			
+			if(commands == NULL){
+				if(fork() == 0)
+					execv(args[0], args);
+				else
+					wait(&status);
+			}	
+			else if(strcmp(commands, "&") == 0){
+				if(fork() == 0){
+					execv(args[0], args);
+				}
+				//else
+					//wait(NULL);
+			}
 		}
 	}
 
