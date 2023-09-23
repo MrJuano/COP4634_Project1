@@ -1,0 +1,15 @@
+total 452
+-rw-r--r-- 1 maya maya  79159 Sep 21 23:53 COP_4634_PROJECT_1_MIDPOINT_REPORT.pdf
+-rw-r--r-- 1 maya maya    226 Sep 21 23:53 Makefile
+-rwxr-xr-x 1 maya maya  22232 Sep 23 14:06 myshell
+-rw-r--r-- 1 maya maya   4282 Sep 23 12:12 myshell.cpp
+-rw-r--r-- 1 maya maya  10216 Sep 23 14:06 myshell.o
+-rw-r--r-- 1 maya maya   1588 Sep 22 13:10 parse.cpp
+-rw-r--r-- 1 maya maya    608 Sep 22 13:01 parse.hpp
+-rw-r--r-- 1 maya maya   5712 Sep 23 14:06 parse.o
+-rw-r--r-- 1 maya maya 286557 Sep 21 23:53 Project-1.pdf
+-rw-r--r-- 1 maya maya   2614 Sep 21 23:53 README.md
+-rwxr-xr-x 1 maya maya  16104 Sep 23 11:58 slow
+-rw-r--r-- 1 maya maya    219 Sep 23 12:14 slow.c
+-rw-r--r-- 1 maya maya     26 Sep 23 12:14 slow.c:Zone.Identifier
+-rw-r--r-- 1 maya maya      0 Sep 23 14:07 testfi
