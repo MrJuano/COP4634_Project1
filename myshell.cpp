@@ -53,12 +53,10 @@ void ls(char* commands){
 void grep(char *commands){
 	if(commands == NULL){std::cout << "FUCG";}
 	else if(commands[0] == '-' && commands[1] == 'i'){
-		std::cout << "ININ\n";
 		commands = strtok(NULL, " \t\n");
 
 		if(commands == NULL){}
 		else if(strcmp(commands, "shell") == 0){
-			std::cout << "INININ\n";
 			commands = strtok(NULL, " \t\n");
 
 			if(commands == NULL){}
@@ -72,19 +70,34 @@ void grep(char *commands){
 
 void cat(char *commands){
 	int status;
-	if(commands[0] == '<'){
+	if(commands == NULL){std::cout << "ERROR: ENTER FILE NAME\n";}
+	else if(commands[0] == '<'){
 		char *fileName = new char[strlen(commands) + 1];
 		strcpy(fileName, commands);
 		fileName++;
+		
+		commands = strtok(NULL, " \t\n");
 
-		char *args[] = {"cat", fileName, NULL};
-		if(fork() == 0){
-			//freopen(fileName, "w", stdout);
-               		//execlp("ls", "ls", "-l", (char *)NULL);i
-			execvp("cat", args);
+		if(commands == NULL){
+			char *args[] = {"cat", fileName, NULL};
+			if(fork() == 0){
+				execvp("cat", args);
+			}
+			else
+				wait(&status);
 		}
-		else
-			wait(&status);
+		else {
+			if(strcmp(commands, "&") == 0){
+				char *args[] = {"cat", fileName, NULL};
+				if(fork() == 0){
+					execvp("cat", args);
+				}
+				else
+					wait(NULL);
+			}
+			else
+				std::cout << "ERROR: UNEXPECTED INPUT\n";
+		}
 
 	}
 }
