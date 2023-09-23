@@ -48,12 +48,29 @@ void ls(char* commands){
 		else{
 			std::cout << "ERROR\n";
 		}
-
+	
 	}	
 }
 
-void grep(){
+void grep(char *commands){
+	//std::cout << commands << "IN\n";
+	if(commands == NULL){std::cout << "FUCG";}
+	else if(commands[0] == '-' && commands[1] == 'i'){//strcmp(commands, "-i") == 0){
+		std::cout << "ININ\n";
+		commands = strtok(NULL, " \t\n");
 
+		if(commands == NULL){}
+		else if(strcmp(commands, "shell") == 0){
+			std::cout << "INININ\n";
+			commands = strtok(NULL, " \t\n");
+
+			if(commands == NULL){}
+			else {
+				char *args[] = {"grep", "-i", "shell", commands, NULL};
+				execv("/bin/grep", args);
+			}
+		}
+	}
 }
 
 void cat(){
@@ -99,7 +116,7 @@ int main(int args, char* command[]){
 		}
 		else if(strcmp(commands, "grep") == 0){
 			commands = strtok(NULL, " \n\t");
-			grep();
+			grep(commands);
 		}
 		else if(strcmp(commands, "cat") == 0){
 			commands = strtok(NULL, " \n\t");
