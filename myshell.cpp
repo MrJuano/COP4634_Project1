@@ -17,9 +17,8 @@ void Driver(int integer){
 	char input[500];
 	char inputBuffer[500];
 
-
+	std::cout << "$$$ ";
 	while(true){
-		std::cout << "$$$ ";
 		std::cin.getline(input, 500);
 
 		if (strcmp(input, "exit") == 0){
@@ -159,14 +158,18 @@ void Driver(int integer){
 					wait(&status);
 			}
 			else if(background == 1){
+
 				if(fork() == 0)
 						execv(args[0], args);
+				if(args[0][0] != '.' && args[0][1] != '/')
+					wait(NULL);
 			}
 		}
 		else if(run == 2){}
 		else{
 			std::cout << "ERROR: " << argumentVector[0] << " is not a valid command.\n"; 
 		}
+		std::cout << "$$$ ";
 	}
 }
 
