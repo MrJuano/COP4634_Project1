@@ -74,25 +74,31 @@ void Driver(int integer){
 
 		delete commands;
 
+		
 		char *args[10];
 		int run = 1;
 
-		if(argumentVector[0] == NULL){}	
+	    		if(argumentVector[0] == NULL){}	
 		else if(strcmp(argumentVector[0], "ls") == 0){
-			args[0] = "/bin/ls";
+			char temp[] = "/bin/ls"; 
+			args[0] = temp;
 		}
+		
 		else if(strcmp(argumentVector[0], "grep") == 0){
-			args[0] = "/bin/grep";
+			char temp[] = "/bin/grep";
+			args[0] = temp;  
 		}
 		else if(strcmp(argumentVector[0], "cat") == 0){
-			args[0] = "/bin/cat";
+			char temp[] = "/bin/cat";
+			args[0] = temp;
 		}
 		else if(argumentVector[0][0] == '.' && argumentVector[0][1] == '/'){
 			args[0] = argumentVector[0];
 		}
 		else if(strcmp(argumentVector[0], "echo") == 0){
 			run = 2;
-			args[0] = "/bin/echo";
+			char temp[] = "/bin/echo";
+			args[0] = temp;
 
 			int i = 1;
 
