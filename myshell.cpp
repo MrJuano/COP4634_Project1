@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#define MAXARGS 32
 
 
 void printInput(char input[500]){
@@ -10,145 +11,156 @@ void printInput(char input[500]){
 	par->printParams();
 }
 
-void ls(char* commands){
-	int status;
-	
-	if(commands == NULL){
-		char *args[] = {"/bin/ls", NULL};	
-		if(fork() == 0)
-			execv(args[0], args);
-		else
+void Driver(int integer){
+	int status; 
+	int debugMode = integer;
+	char input[500];
+	char inputBuffer[500];
+
+
+	while(true){
+		std::cout << "$$$ ";
+		std::cin.getline(input, 500);
+
+		if (strcmp(input, "exit") == 0){
+			//wait(NULL);
 			wait(&status);
-	}
-	else if(strcmp(commands, "-l") == 0){
-		commands = strtok(NULL, " \n\t-l");
-		if(commands == NULL){
-			char *args[] = {"/bin/ls", "-l", NULL};
+			break;	
+		}
+		
+		if(strcmp(input, "printParam()") == 0)
+			printInput(inputBuffer);
+		else if(debugMode == 1)
+			printInput(input);
+
+		if(strcmp(input, "-Debug") == 0)
+			debugMode = 1;
+		else
+			strcpy(inputBuffer, input);
+		
+		char *inputRedirect = NULL; 		/* file name or NULL */
+		char *outputRedirect = NULL; 		/* file name or NULL */
+		int background = 0;			/* either 0 (false) or 1 (true) */
+		int argumentCount = 0; 		/* number of tokens in argument vector */
+		char *argumentVector[MAXARGS];
+		
+		char *commands = strtok(const_cast<char *>(input), " \n\t");
+
+		while(commands != nullptr){
+			if(commands[0] == '<'){
+				if(commands != nullptr){
+					inputRedirect = new char[strlen(commands) + 1];
+					strcpy(inputRedirect, commands);
+					inputRedirect++;
+				}
+			}
+			else if(commands[0] == '>'){
+				if(commands != nullptr){
+					outputRedirect = new char[strlen(commands) + 1];
+					strcpy(outputRedirect, commands);
+					outputRedirect++;
+				}
+			}
+			else if(strcmp(commands, "&") == 0)
+				background = 1;
+			else {
+				argumentVector[argumentCount] = new char[strlen(commands) + 1];
+				strcpy(argumentVector[argumentCount], commands);
+				argumentCount += 1;
+			}
+
+			commands = strtok(NULL, " \n\t");
+		}
+
+		delete commands;
+
+		char *args[10];
+		int run = 1;
+
+		if(argumentVector[0] == NULL){}	
+		else if(strcmp(argumentVector[0], "ls") == 0){
+			args[0] = "/bin/ls";
+		}
+		else if(strcmp(argumentVector[0], "grep") == 0){
+			args[0] = "/bin/grep";
+		}
+		else if(strcmp(argumentVector[0], "cat") == 0){
+			args[0] = "/bin/cat";
+		}
+		else if(argumentVector[0][0] == '.' && argumentVector[0][1] == '/'){
+			args[0] = argumentVector[0];
+		}
+		else if(strcmp(argumentVector[0], "echo") == 0){
+			run = 2;
+			args[0] = "/bin/echo";
+
+			int i = 1;
+
+			for(; i < argumentCount; ++i){
+				args[i] = argumentVector[i];
+			}
+
+			args[i + 1] = NULL;
+			if(outputRedirect != NULL){
+				if(fork() == 0){
+					freopen(outputRedirect, "w", stdout);
+					execv(args[0], args);
+				}
+				else
+					wait(&status);
+			}
+			else {
 			if(fork() == 0)
 				execv(args[0], args);
 			else
 				wait(&status);
-		}
-		else if(commands[0] == '>'){
-			char *fileName = new char[strlen(commands) + 1];
-			strcpy(fileName, commands);
-			fileName++;
-
-			char *args[] = {"/bin/ls", "-l", fileName, NULL};
-			if(fork() == 0){
-				freopen(fileName, "w", stdout);
-               			execlp("ls", "ls", "-l", (char *)NULL);
 			}
-			else
-				wait(&status);
-
 		}
 		else{
-			std::cout << "ERROR\n";
+			run = 0;
 		}
-	
-	}	
-}
 
-void grep(char *commands){
-	int status;
-	if(commands == NULL){}
-	else if(commands[0] == '-' && commands[1] == 'i'){
-		commands = strtok(NULL, " \t\n");
 
-		if(commands == NULL){}
-		else if(strcmp(commands, "shell") == 0){
-			commands = strtok(NULL, " \t\n");
+		if(run == 1){
+			int i = 1;
 
-			if(commands == NULL){}
-			else {
-				char *args[] = {"grep", "-i", "shell", commands, NULL};
-				if(fork() == 0)
-					execv("/bin/grep", args);
+			if(inputRedirect != NULL){
+				args[i] = inputRedirect;
+			}
+
+			for(; i < argumentCount; ++i){
+				args[i] = (char *)malloc(strlen(argumentVector[i]) + 1);
+				strcpy(args[i], argumentVector[i]);
+			}
+			
+			if(inputRedirect == NULL && outputRedirect == NULL)
+				args[i] = NULL;
+			else
+				args[i + 1] = NULL;
+
+			if(outputRedirect != NULL){
+				if(fork() == 0){
+					freopen(outputRedirect, "w", stdout);
+					execv(args[0], args);
+				}
 				else
 					wait(&status);
 			}
-		}
-	}
-}
-
-void cat(char *commands){
-	int status;
-	if(commands == NULL){std::cout << "ERROR: ENTER FILE NAME\n";}
-	else if(commands[0] == '<'){
-		char *fileName = new char[strlen(commands) + 1];
-		strcpy(fileName, commands);
-		fileName++;
-		
-		commands = strtok(NULL, " \t\n");
-
-		if(commands == NULL){
-			char *args[] = {"cat", fileName, NULL};
-			if(fork() == 0){
-				execvp("cat", args);
-			}
-			else
-				wait(&status);
-		}
-		else {
-			if(strcmp(commands, "&") == 0){
-				char *args[] = {"cat", fileName, NULL};
-				if(fork() == 0){
-					execvp("cat", args);
-				}
+			else if(background == 0){
+				if(fork() == 0)
+						execv(args[0], args);
 				else
-					wait(NULL);
+					wait(&status);
 			}
-			else
-				std::cout << "ERROR: UNEXPECTED INPUT\n";
-		}
-
-	}
-	else{
-		char *fileName = new char[strlen(commands)];
-		strcpy(fileName, commands);
-		
-		commands = strtok(NULL, " \t\n");	
-
-		if(commands == NULL){
-			char *args[] = {"cat", fileName, NULL};
-			if(fork() == 0){
-				execvp("cat", args);
+			else if(background == 1){
+				if(fork() == 0)
+						execv(args[0], args);
 			}
-			else
-				wait(&status);
 		}
-		else {
-			if(strcmp(commands, "&") == 0){
-				char *args[] = {"cat", fileName, NULL};
-				if(fork() == 0){
-					execvp("cat", args);
-				}
-				else
-					wait(NULL);
-			}
-			else
-				std::cout << "ERROR: UNEXPECTED INPUT\n";
+		else if(run == 2){}
+		else{
+			std::cout << "ERROR: " << argumentVector[0] << " is not a valid command.\n"; 
 		}
-	}
-}
-
-void runFile(char* commands){
-	int status;
-	char *args[] = {commands, NULL};
-	commands = strtok(NULL, " \t\n");
-	if(strcmp(commands, "&") == 0){
-		if(fork() == 0){
-			execv(args[0], args);
-		}
-		else
-			wait(NULL);
-	}
-	else if(commands == NULL){
-		if(fork() == 0)
-			execv(args[0], args);
-		else
-			wait(&status);
 	}
 }
 
@@ -156,71 +168,12 @@ int main(int args, char* command[]){
 	int debugMode = 0;
 	
 	if(command[1] != nullptr){
-		if(strcmp(command[1], "-Debug") == 0)
+		if(strcmp(command[1], "-Debug") == 0){
 			debugMode = 1;
-	}
-	
-	char input[500];
-	char inputBuffer[500];
-	int status;
-	while(true){
-		std::cout << "$$$ ";
-		std::cin.getline(input, 500);
-		
-		if (strcmp(input, "exit") == 0){
-			wait(NULL);
-			break;	
-		}
-		
-		if(strcmp(input, "printParam()") == 0)
-			printInput(inputBuffer);
-		
-		else if(debugMode == 1)
-			printInput(input);
-		
-		if(strcmp(input, "-Debug") == 0)
-			debugMode = 1;
-		else
-			strcpy(inputBuffer, input);
-	
-	
-		char *commands = strtok(const_cast<char *>(input), " \n\t");
-		
-		if(commands == NULL){}	
-		else if(strcmp(commands, "ls") == 0){
-			commands = strtok(NULL, " \n\t");	
-			ls(commands);
-		}
-		else if(strcmp(commands, "grep") == 0){
-			commands = strtok(NULL, " \n\t");
-			grep(commands);
-		}
-		else if(strcmp(commands, "cat") == 0){
-			commands = strtok(NULL, " \n\t");
-			cat(commands);
-		}
-		else if(commands[0] == '.' && commands[1] == '/'){
-			//runFile(commands);
-			int status;
-			char *args[] = {commands, NULL};
-			
-			commands = strtok(NULL, " \t\n");
-			
-			if(commands == NULL){
-				if(fork() == 0)
-					execv(args[0], args);
-				else
-					wait(&status);
-			}	
-			else if(strcmp(commands, "&") == 0){
-				if(fork() == 0){
-					execv(args[0], args);
-				}
-				//else
-					//wait(NULL);
-			}
 		}
 	}
 
+	Driver(debugMode);
+	
 	return 0;
 }
