@@ -25,7 +25,7 @@ Project Members:
     
     Name:           Brian Francis
     Institution:    University of West Florida
-    Email:          bf15@students.uwf.edu         
+    Email:          bf15@students.uwf.edu
 
 FILE OVERVIEW   
 
@@ -36,7 +36,7 @@ FILE OVERVIEW
         Makefile
         slow.c
         slow.cZone.Identifier
-        README
+        README.md
 
 COMPILATION
 
@@ -65,7 +65,6 @@ Launch/Makefile Instructions:
 
     make clean
 
-
 Supported Commands:
 
 ls -l                       Shows a listing of files in the current directory
@@ -77,8 +76,7 @@ cat testfile.txt &          Displays the content of the text file testfile.txt o
                             In the background.
 ./slow &                    Runs the program slow from the current working directory
                             In the background.
-exit                        The myshell program will exit and return the user to Bash.
-                             
+exit                        The myshell program will exit and return the user to Bash.                             
 
 Program Behavior:
 
